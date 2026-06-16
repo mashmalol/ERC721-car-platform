@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پلتفرم خرید و فروش خودرو</title>
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+            background-color: #000;
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            padding: 24px 0;
+        }
+
+        #digitalRainCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.78);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.45);
+            width: min(920px, 92vw);
+            overflow-y: auto;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(0, 255, 0, 0.35);
+        }
+
+        h1, h2, h3 {
+            color: #00ff00;
+            margin-bottom: 16px;
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+        }
+
+        p, label, li, .small-note {
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+            line-height: 1.7;
+        }
+
+        .upload-form, .metadata-output, .explore-section {
+            margin-top: 28px;
+            width: 100%;
+            max-width: 720px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+            text-align: right;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="file"],
+        .form-group textarea,
+        .form-group select,
+        .form-group button {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(0, 255, 0, 0.45);
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+            background-color: rgba(0, 255, 0, 0.08);
+            color: #00ff00;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input[type="file"] {
+            color: #00ff00;
+        }
+
+        .form-group input[type="file"]::-webkit-file-upload-button {
+            background-color: #00ff00;
+            color: #000;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-weight: bold;
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+        }
+
+        .form-group input[type="file"]:hover::-webkit-file-upload-button {
+            background-color: #00cc00;
+        }
+
+        .form-group button {
+            background-color: #00ff00;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #00cc00;
+            box-shadow: 0 0 12px rgba(0, 255, 0, 0.4);
+        }
+
+        #base64Output, #finalMetadataOutput {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #111;
+            border: 1px dashed #00ff00;
+            border-radius: 6px;
+            max-height: 220px;
+            overflow-y: auto;
+            text-align: left;
+            word-wrap: break-word;
+            font-size: 0.86em;
+            line-height: 1.5;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+        }
+
+        #base64Output strong, #finalMetadataOutput strong {
+            color: #ffff00;
+        }
+
+        .download-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ffff00;
+            color: #000;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+        }
+
+        .download-link:hover {
+            background-color: #cccc00;
+        }
+
+        .explore-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        .explore-button {
+            background-color: #ff00ff;
+            color: #fff;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px #ff00ff;
+            font-size: 1.1em;
+            padding: 14px 28px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+        }
+
+        .explore-button:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 20;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.82);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 16px 24px;
+        }
+
+        .modal-content {
+            background-color: rgba(0, 0, 0, 0.92);
+            margin: 0 auto;
+            padding: 24px;
+            border: 3px solid #ff00ff;
+            border-radius: 16px;
+            width: min(760px, 100%);
+            box-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+            position: relative;
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+            color: #00ffff;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .modal-content h2 {
+            color: #ffff00;
+            margin-bottom: 18px;
+            border-bottom: 2px dashed #ffff00;
+            padding-bottom: 8px;
+            width: 100%;
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 16px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: red;
+            text-decoration: none;
+        }
+
+        .car-tokens-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .car-token-card {
+            background-color: rgba(20, 20, 20, 0.8);
+            border: 4px solid;
+            border-image-slice: 1;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 280px;
+        }
+
+        .hue-border-1 { border-image-source: linear-gradient(to right, cyan, magenta); }
+        .hue-border-2 { border-image-source: linear-gradient(to right, yellow, cyan); }
+        .hue-border-3 { border-image-source: linear-gradient(to right, magenta, yellow); }
+        .hue-border-4 { border-image-source: linear-gradient(to right, lime, blue); }
+        .hue-border-5 { border-image-source: linear-gradient(to right, orange, purple); }
+
+        .car-token-card img {
+            max-width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 2px solid #fff;
+        }
+
+        .car-token-card h3 {
+            color: #ffff00;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .car-token-card p {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .car-token-card .price {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #00ffff;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+
+        .car-token-card .buy-button {
+            background-color: #00ff00;
+            color: #000;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+        }
+
+        .car-token-card .buy-button:hover {
+            background-color: #00cc00;
+        }
+
+        .info-button {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 25;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid #00ff00;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            color: #000;
+            font-size: 1.4em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 18px rgba(255, 0, 255, 0.45);
+        }
+
+        .info-button:hover {
+            transform: scale(1.05);
+        }
+
+        .info-modal-content {
+            align-items: flex-start;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .info-modal-content ul {
+            padding-right: 18px;
+            margin: 8px 0 0;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="digitalRainCanvas"></canvas>
+    <div class="content">
+        <h1>پلتفرم خرید و فروش خودرو</h1>
+        <p>ابزاری برای دلالان و فروشنده‌های تکنولوژی‌دوست؛ لیست خودرو، ساخت متادیتا و آماده‌سازی داده برای آینده‌ی دیجیتال.</p>
+
+        <div class="upload-form">
+            <h2>خودروی خود را با جزئیات کامل لیست کنید</h2>
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="carImageInput">تصویر خودرو:</label>
+                    <input type="file" id="carImageInput" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="carName">نام/مدل خودرو:</label>
+                    <input type="text" id="carName" placeholder="مثال: پژو ۲۰۶ مدل ۱۴۰۰">
+                </div>
+                <div class="form-group">
+                    <label for="carYear">سال ساخت:</label>
+                    <input type="number" id="carYear" placeholder="مثال: ۱۴۰۰">
+                </div>
+                <div class="form-group">
+                    <label for="carMileage">کارکرد (کیلومتر):</label>
+                    <input type="number" id="carMileage" placeholder="مثال: 85000">
+                </div>
+                <div class="form-group">
+                    <label for="carTransmission">گیربکس:</label>
+                    <select id="carTransmission">
+                        <option value="">انتخاب کنید</option>
+                        <option value="دستی">دستی</option>
+                        <option value="اتوماتیک">اتوماتیک</option>
+                        <option value="CVT">CVT</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="carFuel">نوع سوخت:</label>
+                    <select id="carFuel">
+                        <option value="">انتخاب کنید</option>
+                        <option value="بنزین">بنزین</option>
+                        <option value="دوگانه‌سوز">دوگانه‌سوز</option>
+                        <option value="برقی">برقی</option>
+                        <option value="گازوئیل">گازوئیل</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="carColor">رنگ:</label>
+                    <input type="text" id="carColor" placeholder="مثال: سفید">
+                </div>
+                <div class="form-group">
+                    <label for="carCity">شهر:</label>
+                    <input type="text" id="carCity" placeholder="مثال: تهران">
+                </div>
+                <div class="form-group">
+                    <label for="carCondition">وضعیت:</label>
+                    <select id="carCondition">
+                        <option value="">انتخاب کنید</option>
+                        <option value="عالی">عالی</option>
+                        <option value="خوب">خوب</option>
+                        <option value="معمولی">معمولی</option>
+                        <option value="نیازمند تعمیر">نیازمند تعمیر</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="carPrice">قیمت (تومان):</label>
+                    <input type="number" id="carPrice" placeholder="مثال: 1500000000">
+                </div>
+                <div class="form-group full-width">
+                    <label for="carDescription">توضیحات:</label>
+                    <textarea id="carDescription" placeholder="مثال: خودروی سالم، کم‌کارکرد، بدون رنگ و دارای سابقه سرویس"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button id="processButton">تولید لیست و متادیتا</button>
+            </div>
+
+            <div id="base64Output" style="display: none;"></div>
+        </div>
+
+        <div class="metadata-output" style="display: none;">
+            <h2>متادیتای لیست تولید شده</h2>
+            <div id="finalMetadataOutput"></div>
+            <a href="#" id="downloadMetadataLink" class="download-link" download="metadata.json" style="display: none;">دانلود متادیتا (.json)</a>
+        </div>
+
+        <div class="explore-section">
+            <button class="explore-button" id="exploreButton">کاوش خودروهای مینت‌شده</button>
+        </div>
+    </div>
+
+    <div id="mintedCarsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>توکن‌های خودروی مینت‌شده</h2>
+            <div class="car-tokens-container" id="carTokensContainer"></div>
+        </div>
+    </div>
+
+    <button id="infoButton" class="info-button" aria-label="اطلاعات بیشتر">?</button>
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content info-modal-content">
+            <span class="close-button">&times;</span>
+            <h2>این سایت برای چه کسانی طراحی شده؟</h2>
+            <p>این صفحه برای دلالان، فروشنده‌های خودرو و کاربرانی طراحی شده که با NFT، متادیتا و فروش دیجیتال آشنا هستند. هدف این است که یک خودرو را از حالت لیست ساده، به یک «شیء دیجیتال قابل مدیریت» تبدیل کنید.</p>
+            <h3>ERC-721 چیست؟</h3>
+            <p>ERC-721 یک استاندارد روی زنجیره‌ی اتریوم است که برای ساخت توکن‌های غیرقابل تعویض استفاده می‌شود؛ یعنی هر توکن منحصر به فرد است، مثل یک سند مالکیت دیجیتال یا یک نمونه‌ی خاص از یک خودرو.</p>
+            <p>برای دلالان خودرو، این یعنی می‌توان یک خودرو را به‌صورت دیجیتال ثبت کرد، اطلاعات آن را در قالب متادیتا نگهداری کرد و در آینده آن را به یک دارایی قابل معامله یا قابل نمایش تبدیل نمود.</p>
+            <h3>متادیتا در اینجا چه کاربردی دارد؟</h3>
+            <ul>
+                <li>ثبت جزئیات خودرو مانند مدل، سال، کارکرد، رنگ و وضعیت</li>
+                <li>ذخیره‌ی تصویر خودرو به‌صورت داده‌ی Base64</li>
+                <li>ایجاد یک فایل JSON قابل دانلود برای استفاده در پلتفرم‌های دیجیتال</li>
+                <li>آماده‌سازی داده برای آینده‌ی NFT، نمایش آنلاین یا سیستم‌های مدیریت دارایی</li>
+            </ul>
+            <p class="small-note">اگر بخواهید، در نسخه‌ی بعدی این پروژه می‌توان این داده‌ها را به یک backend، پایگاه داده یا کیف‌پول blockchain متصل کرد.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
