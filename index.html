@@ -28,14 +28,6 @@
             padding: 24px 0;
         }
 
-        #digitalRainCanvas {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
         .content {
             position: relative;
             z-index: 1;
@@ -228,6 +220,10 @@
             padding: 60px 16px 24px;
         }
 
+        .modal.active {
+            display: flex;
+        }
+
         .modal-content {
             background-color: rgba(0, 0, 0, 0.92);
             margin: 0 auto;
@@ -382,37 +378,333 @@
             .form-grid {
                 grid-template-columns: 1fr;
             }
+
+            .photo-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        :root {
+            color-scheme: light;
+            --paper: #f1efe9;
+            --ink: #151515;
+            --muted: #6b6b65;
+            --line: #151515;
+            --accent: #f04b23;
+            --panel: #ffffff;
+        }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: Arial, Helvetica, sans-serif;
+            align-items: flex-start;
+            padding: 0;
+        }
+
+        .content {
+            background: var(--panel);
+            border: 3px solid var(--line);
+            border-radius: 0;
+            box-shadow: none;
+            color: var(--ink);
+            padding: clamp(20px, 4vw, 44px);
+            width: 100%;
+            min-height: 100vh;
+            max-height: none;
+            overflow-y: visible;
+        }
+
+        h1, h2, h3,
+        .form-group label,
+        .modal-content h2,
+        .car-token-card h3 {
+            color: var(--ink);
+            font-family: Arial, Helvetica, sans-serif;
+            letter-spacing: 0;
+        }
+
+        h1 {
+            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+            font-size: clamp(1.7rem, 5vw, 4rem);
+            line-height: 1.05;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            max-width: none;
+            width: 100%;
+            white-space: nowrap;
+            text-align: left;
+            align-self: stretch;
+            border: 3px solid var(--accent);
+            border-left-width: 10px;
+            padding: 18px 20px;
+            text-shadow: 2px 2px 0 rgba(240, 75, 35, 0.2);
+            box-shadow: 0 0 8px rgba(240, 75, 35, 0.7), 0 0 24px rgba(240, 75, 35, 0.28);
+        }
+
+        .content > p {
+            color: var(--muted);
+            text-align: left;
+            align-self: stretch;
+            max-width: 680px;
+        }
+
+        .upload-form, .metadata-output, .explore-section {
+            max-width: none;
+            margin-top: 34px;
+        }
+
+        .upload-form > h2,
+        .metadata-output > h2 {
+            text-align: left;
+            text-transform: uppercase;
+            font-size: 1rem;
+            border-top: 3px solid var(--ink);
+            padding-top: 12px;
+        }
+
+        .form-grid {
+            gap: 18px 14px;
+        }
+
+        .form-section-title {
+            grid-column: 1 / -1;
+            margin: 22px 0 0;
+            padding: 9px 12px;
+            background: var(--ink);
+            color: var(--paper);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-align: left;
+            text-transform: uppercase;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            width: 100%;
+        }
+
+        .photo-slot {
+            min-height: 150px;
+            border: 2px dashed var(--line);
+            background: #e7e5de;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+        }
+
+        .photo-slot label {
+            font-size: 0.72rem;
+            text-align: center;
+        }
+
+        .photo-slot input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            font-size: 0.72rem;
+            box-shadow: none;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+            text-align: left;
+        }
+
+        .form-group label {
+            margin-bottom: 7px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="file"],
+        .form-group input[type="date"],
+        .form-group input[type="tel"],
+        .form-group textarea,
+        .form-group select {
+            border: 2px solid var(--line);
+            border-radius: 0;
+            background: #fff;
+            color: var(--ink);
+            font-family: Arial, Helvetica, sans-serif;
+            box-shadow: 3px 3px 0 #d0cec7;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: 3px solid var(--accent);
+            outline-offset: 1px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .form-group input[type="file"]::-webkit-file-upload-button {
+            background: var(--ink);
+            color: #fff;
+            border-radius: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .form-group button,
+        .explore-button {
+            border: 3px solid var(--ink);
+            border-radius: 0;
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 5px 5px 0 var(--ink);
+            font-family: Arial, Helvetica, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .form-group button:hover,
+        .explore-button:hover {
+            background: var(--ink);
+            box-shadow: 2px 2px 0 var(--accent);
+            transform: translate(3px, 3px);
+        }
+
+        #base64Output, #finalMetadataOutput {
+            border: 2px solid var(--line);
+            border-radius: 0;
+            background: #e7e5de;
+            color: var(--ink);
+        }
+
+        #base64Output strong, #finalMetadataOutput strong {
+            color: var(--accent);
+        }
+
+        .download-link {
+            border-radius: 0;
+            background: var(--ink);
+            color: #fff;
+        }
+
+        .explore-button {
+            margin-bottom: 20px;
+        }
+
+        .content > .explore-section {
+            align-items: flex-start;
+            margin-top: 0;
+            margin-bottom: 28px;
+        }
+
+        .modal {
+            background: rgba(21, 21, 21, 0.7);
+            backdrop-filter: none;
+        }
+
+        .modal-content {
+            background: var(--paper);
+            border: 3px solid var(--ink);
+            border-radius: 0;
+            box-shadow: 10px 10px 0 var(--accent);
+            color: var(--ink);
+        }
+
+        .modal-content h2 {
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .info-button {
+            right: 28px;
+            bottom: 28px;
+            width: 64px;
+            height: 64px;
+            border: 3px solid var(--ink);
+            border-radius: 0;
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 6px 6px 0 var(--ink);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .info-button:hover {
+            transform: translate(3px, 3px);
+            box-shadow: 3px 3px 0 var(--ink);
+        }
+
+        .fab-kicker {
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
-    <canvas id="digitalRainCanvas"></canvas>
     <div class="content">
         <h1>پلتفرم خرید و فروش خودرو</h1>
-        <p>ابزاری برای دلالان و فروشنده‌های تکنولوژی‌دوست؛ لیست خودرو، ساخت متادیتا و آماده‌سازی داده برای آینده‌ی دیجیتال.</p>
+        <div class="explore-section">
+            <button class="explore-button" id="exploreButton">کاوش خودروهای مینت‌شده</button>
+        </div>
+        <p>ثبت مشخصات خودرو، بررسی وضعیت و تولید فایل متادیتای فروش.</p>
 
         <div class="upload-form">
             <h2>خودروی خود را با جزئیات کامل لیست کنید</h2>
             <div class="form-grid">
+                <div class="form-section-title">01 / Identity &amp; location</div>
                 <div class="form-group full-width">
-                    <label for="carImageInput">تصویر خودرو:</label>
-                    <input type="file" id="carImageInput" accept="image/*">
+                    <label>تصاویر خودرو: چهار تصویر واضح از خودرو اضافه کنید.</label>
+                    <div class="photo-grid">
+                        <div class="photo-slot">
+                            <label for="carImageInput1">۰۱ / نمای جلو</label>
+                            <input type="file" id="carImageInput1" accept="image/*" required>
+                        </div>
+                        <div class="photo-slot">
+                            <label for="carImageInput2">۰۲ / نمای عقب</label>
+                            <input type="file" id="carImageInput2" accept="image/*" required>
+                        </div>
+                        <div class="photo-slot">
+                            <label for="carImageInput3">۰۳ / کابین</label>
+                            <input type="file" id="carImageInput3" accept="image/*" required>
+                        </div>
+                        <div class="photo-slot">
+                            <label for="carImageInput4">۰۴ / ایراد یا جزئیات</label>
+                            <input type="file" id="carImageInput4" accept="image/*" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="carMake">سازنده:</label>
+                    <input type="text" id="carMake" placeholder="مثال: پژو" required>
                 </div>
                 <div class="form-group">
                     <label for="carName">نام/مدل خودرو:</label>
-                    <input type="text" id="carName" placeholder="مثال: پژو ۲۰۶ مدل ۱۴۰۰">
+                    <input type="text" id="carName" placeholder="مثال: ۲۰۶" required>
+                </div>
+                <div class="form-group">
+                    <label for="carTrim">تیپ/نسخه:</label>
+                    <input type="text" id="carTrim" placeholder="مثال: تیپ ۵" required>
                 </div>
                 <div class="form-group">
                     <label for="carYear">سال ساخت:</label>
-                    <input type="number" id="carYear" placeholder="مثال: ۱۴۰۰">
+                    <input type="number" id="carYear" placeholder="مثال: ۱۴۰۰" required>
                 </div>
                 <div class="form-group">
                     <label for="carMileage">کارکرد (کیلومتر):</label>
-                    <input type="number" id="carMileage" placeholder="مثال: 85000">
+                    <input type="number" id="carMileage" placeholder="مثال: 85000" required>
                 </div>
                 <div class="form-group">
                     <label for="carTransmission">گیربکس:</label>
-                    <select id="carTransmission">
+                    <select id="carTransmission" required>
                         <option value="">انتخاب کنید</option>
                         <option value="دستی">دستی</option>
                         <option value="اتوماتیک">اتوماتیک</option>
@@ -421,7 +713,7 @@
                 </div>
                 <div class="form-group">
                     <label for="carFuel">نوع سوخت:</label>
-                    <select id="carFuel">
+                    <select id="carFuel" required>
                         <option value="">انتخاب کنید</option>
                         <option value="بنزین">بنزین</option>
                         <option value="دوگانه‌سوز">دوگانه‌سوز</option>
@@ -431,15 +723,15 @@
                 </div>
                 <div class="form-group">
                     <label for="carColor">رنگ:</label>
-                    <input type="text" id="carColor" placeholder="مثال: سفید">
+                    <input type="text" id="carColor" placeholder="مثال: سفید" required>
                 </div>
                 <div class="form-group">
                     <label for="carCity">شهر:</label>
-                    <input type="text" id="carCity" placeholder="مثال: تهران">
+                    <input type="text" id="carCity" placeholder="مثال: تهران" required>
                 </div>
                 <div class="form-group">
                     <label for="carCondition">وضعیت:</label>
-                    <select id="carCondition">
+                    <select id="carCondition" required>
                         <option value="">انتخاب کنید</option>
                         <option value="عالی">عالی</option>
                         <option value="خوب">خوب</option>
@@ -449,11 +741,83 @@
                 </div>
                 <div class="form-group">
                     <label for="carPrice">قیمت (تومان):</label>
-                    <input type="number" id="carPrice" placeholder="مثال: 1500000000">
+                    <input type="number" id="carPrice" placeholder="مثال: 1500000000" required>
+                </div>
+                <div class="form-section-title">02 / Mechanical check</div>
+                <div class="form-group">
+                    <label for="documentStatus">وضعیت سند و مدارک:</label>
+                    <select id="documentStatus" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="کامل و آماده انتقال">کامل و آماده انتقال</option>
+                        <option value="در رهن">در رهن</option>
+                        <option value="نیازمند تکمیل">نیازمند تکمیل</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="insuranceExpiry">تاریخ اعتبار بیمه:</label>
+                    <input type="date" id="insuranceExpiry" required>
+                </div>
+                <div class="form-group">
+                    <label for="engineCondition">وضعیت موتور:</label>
+                    <select id="engineCondition" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="سالم">سالم</option>
+                        <option value="نیازمند سرویس">نیازمند سرویس</option>
+                        <option value="نیازمند تعمیر">نیازمند تعمیر</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="gearboxCondition">وضعیت گیربکس:</label>
+                    <select id="gearboxCondition" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="سالم">سالم</option>
+                        <option value="نیازمند سرویس">نیازمند سرویس</option>
+                        <option value="نیازمند تعمیر">نیازمند تعمیر</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tiresCondition">وضعیت لاستیک‌ها:</label>
+                    <input type="text" id="tiresCondition" placeholder="مثال: ۷۰٪، چهار حلقه یکسان" required>
+                </div>
+                <div class="form-section-title">03 / Body &amp; equipment</div>
+                <div class="form-group">
+                    <label for="accidentHistory">سابقه تصادف:</label>
+                    <select id="accidentHistory" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="بدون تصادف">بدون تصادف</option>
+                        <option value="تصادف جزئی">تصادف جزئی</option>
+                        <option value="تصادف شدید">تصادف شدید</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="paintedPanels">قطعات رنگ‌شده:</label>
+                    <input type="text" id="paintedPanels" placeholder="مثال: گلگیر جلو راست" required>
+                </div>
+                <div class="form-group full-width">
+                    <label for="carFeatures">آپشن‌ها و امکانات:</label>
+                    <textarea id="carFeatures" placeholder="مثال: سانروف، دوربین عقب، کروز کنترل، سنسور پارک" required></textarea>
+                </div>
+                <div class="form-section-title">04 / Deal terms</div>
+                <div class="form-group">
+                    <label for="saleType">شرایط فروش:</label>
+                    <select id="saleType" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="نقدی">نقدی</option>
+                        <option value="نقدی و اقساطی">نقدی و اقساطی</option>
+                        <option value="معاوضه">معاوضه</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="negotiable">قیمت قابل مذاکره:</label>
+                    <select id="negotiable" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="بله">بله</option>
+                        <option value="خیر">خیر</option>
+                    </select>
                 </div>
                 <div class="form-group full-width">
                     <label for="carDescription">توضیحات:</label>
-                    <textarea id="carDescription" placeholder="مثال: خودروی سالم، کم‌کارکرد، بدون رنگ و دارای سابقه سرویس"></textarea>
+                    <textarea id="carDescription" placeholder="مثال: خودروی سالم، کم‌کارکرد، بدون رنگ و دارای سابقه سرویس" required></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -469,9 +833,6 @@
             <a href="#" id="downloadMetadataLink" class="download-link" download="metadata.json" style="display: none;">دانلود متادیتا (.json)</a>
         </div>
 
-        <div class="explore-section">
-            <button class="explore-button" id="exploreButton">کاوش خودروهای مینت‌شده</button>
-        </div>
     </div>
 
     <div id="mintedCarsModal" class="modal">
@@ -487,19 +848,36 @@
     <div id="infoModal" class="modal">
         <div class="modal-content info-modal-content">
             <span class="close-button">&times;</span>
-            <h2>این سایت برای چه کسانی طراحی شده؟</h2>
-            <p>این صفحه برای دلالان، فروشنده‌های خودرو و کاربرانی طراحی شده که با NFT، متادیتا و فروش دیجیتال آشنا هستند. هدف این است که یک خودرو را از حالت لیست ساده، به یک «شیء دیجیتال قابل مدیریت» تبدیل کنید.</p>
-            <h3>ERC-721 چیست؟</h3>
-            <p>ERC-721 یک استاندارد روی زنجیره‌ی اتریوم است که برای ساخت توکن‌های غیرقابل تعویض استفاده می‌شود؛ یعنی هر توکن منحصر به فرد است، مثل یک سند مالکیت دیجیتال یا یک نمونه‌ی خاص از یک خودرو.</p>
-            <p>برای دلالان خودرو، این یعنی می‌توان یک خودرو را به‌صورت دیجیتال ثبت کرد، اطلاعات آن را در قالب متادیتا نگهداری کرد و در آینده آن را به یک دارایی قابل معامله یا قابل نمایش تبدیل نمود.</p>
-            <h3>متادیتا در اینجا چه کاربردی دارد؟</h3>
+            <span class="fab-kicker">Listing protocol / 04</span>
+            <h2>قبل از تولید لیست</h2>
+            <p>این فرم برای تبدیل یک خودرو به یک رکورد قابل بررسی طراحی شده است. اطلاعات را از روی سند، بیمه‌نامه و بازدید فنی وارد کنید؛ حدس‌زدن، کیفیت آگهی را پایین می‌آورد.</p>
+            <h3>کنترل‌های ضروری</h3>
             <ul>
-                <li>ثبت جزئیات خودرو مانند مدل، سال، کارکرد، رنگ و وضعیت</li>
-                <li>ذخیره‌ی تصویر خودرو به‌صورت داده‌ی Base64</li>
-                <li>ایجاد یک فایل JSON قابل دانلود برای استفاده در پلتفرم‌های دیجیتال</li>
-                <li>آماده‌سازی داده برای آینده‌ی NFT، نمایش آنلاین یا سیستم‌های مدیریت دارایی</li>
+                <li>هویت: سازنده، مدل، تیپ، سال، شهر و رنگ</li>
+                <li>وضعیت: موتور، گیربکس، لاستیک، تصادف و قطعات رنگ‌شده</li>
+                <li>معامله: قیمت، نوع فروش و امکان مذاکره</li>
+                <li>خروجی: تصویر، توضیحات و متادیتای JSON قابل دانلود</li>
             </ul>
-            <p class="small-note">اگر بخواهید، در نسخه‌ی بعدی این پروژه می‌توان این داده‌ها را به یک backend، پایگاه داده یا کیف‌پول blockchain متصل کرد.</p>
+            <h3>برای اطلاعات دقیق‌تر</h3>
+            <ul>
+                <li>تصویر: عکس روشن و واقعی از جلو، عقب، کابین و بخش‌های آسیب‌دیده اضافه کنید.</li>
+                <li>فنی: وضعیت موتور، گیربکس و لاستیک را بر اساس بازدید یا گزارش کارشناسی وارد کنید.</li>
+                <li>بدنه: قطعات رنگ‌شده و تصادف را دقیق بنویسید؛ «بدون رنگ» را فقط در صورت اطمینان انتخاب کنید.</li>
+                <li>امکانات: آپشن‌ها را با جداکننده بنویسید، مثل «سانروف، دوربین، سنسور پارک».</li>
+                <li>توضیحات: ایرادهای موجود، زمان آخرین سرویس و هر نکته‌ای که خریدار باید بداند را اضافه کنید.</li>
+            </ul>
+            <h3>خروجی چه دارد؟</h3>
+            <p>فایل JSON شامل شناسه لیست، قیمت، تصویر، مشخصات خودرو، وضعیت فنی و شرایط معامله است. این فایل برای آرشیو، بررسی یا اتصال به سیستم‌های بعدی آماده می‌شود.</p>
+            <h3>ERC-721 و متادیتای JSON</h3>
+            <p>در استاندارد ERC-721، هر توکن می‌تواند به یک فایل متادیتا اشاره کند. این فایل معمولاً شامل چهار بخش اصلی است:</p>
+            <ul>
+                <li><strong>name:</strong> نام قابل نمایش توکن، مانند سازنده، مدل و تیپ خودرو</li>
+                <li><strong>description:</strong> توضیحات کامل درباره وضعیت و شرایط خودرو</li>
+                <li><strong>image:</strong> تصویر خودرو با آدرس یا داده تصویری قابل خواندن توسط کیف‌پول و مارکت</li>
+                <li><strong>attributes:</strong> ویژگی‌های قابل فیلتر مانند سال، کارکرد، رنگ، سوخت و قیمت</li>
+            </ul>
+            <p>شناسه توکن باید یکتا باشد و آدرس متادیتا باید تا حد ممکن پایدار بماند. این پروژه فایل JSON را آماده و قابل دانلود می‌کند؛ اتصال کیف‌پول، ذخیره‌سازی دائمی و مینت واقعی روی شبکه هنوز جداگانه باید اضافه شود.</p>
+            <p class="small-note">اطلاعات تماس در متادیتای عمومی ذخیره نمی‌شود؛ آن را فقط در کانال امن معامله نگه دارید.</p>
         </div>
     </div>
 

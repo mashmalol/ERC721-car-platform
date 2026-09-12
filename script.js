@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('digitalRainCanvas');
-    const ctx = canvas.getContext('2d');
-    const carImageInput = document.getElementById('carImageInput');
+    const carImageInputs = [...document.querySelectorAll('.photo-slot input[type="file"]')];
+    const carMakeInput = document.getElementById('carMake');
     const carNameInput = document.getElementById('carName');
+    const carTrimInput = document.getElementById('carTrim');
     const carYearInput = document.getElementById('carYear');
     const carMileageInput = document.getElementById('carMileage');
     const carTransmissionInput = document.getElementById('carTransmission');
@@ -11,6 +11,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const carCityInput = document.getElementById('carCity');
     const carConditionInput = document.getElementById('carCondition');
     const carPriceInput = document.getElementById('carPrice');
+    const documentStatusInput = document.getElementById('documentStatus');
+    const insuranceExpiryInput = document.getElementById('insuranceExpiry');
+    const engineConditionInput = document.getElementById('engineCondition');
+    const gearboxConditionInput = document.getElementById('gearboxCondition');
+    const tiresConditionInput = document.getElementById('tiresCondition');
+    const accidentHistoryInput = document.getElementById('accidentHistory');
+    const paintedPanelsInput = document.getElementById('paintedPanels');
+    const carFeaturesInput = document.getElementById('carFeatures');
+    const saleTypeInput = document.getElementById('saleType');
+    const negotiableInput = document.getElementById('negotiable');
     const carDescriptionInput = document.getElementById('carDescription');
     const processButton = document.getElementById('processButton');
     const base64OutputDiv = document.getElementById('base64Output');
@@ -25,46 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoButton = document.getElementById('infoButton');
     const infoModal = document.getElementById('infoModal');
 
-    let drops;
-    const FONT_SIZE = 16;
-    const CHARACTERS = 'ｦｱ-ﾝ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,;:!?%&*+-=<>()[]{}@#$^~';
-
     function openModal(modal) {
         modal.classList.add('active');
     }
 
     function closeModal(modal) {
         modal.classList.remove('active');
-    }
-
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        drops = [];
-        const columns = Math.floor(canvas.width / FONT_SIZE);
-        for (let i = 0; i < columns; i++) {
-            drops[i] = 1;
-        }
-    }
-
-    function drawDigitalRain() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#00ff00';
-        ctx.font = `${FONT_SIZE}px 'Courier New', Courier, monospace`;
-
-        for (let i = 0; i < drops.length; i++) {
-            const charIndex = Math.floor(Math.random() * CHARACTERS.length);
-            const character = CHARACTERS.charAt(charIndex);
-            const x = i * FONT_SIZE;
-            const y = drops[i] * FONT_SIZE;
-            ctx.fillText(character, x, y);
-
-            if (y > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-            drops[i]++;
-        }
     }
 
     function imageToBase64WithFormatting(file) {
@@ -96,38 +72,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function constructFinalMetadata(formattedBase64, mimeType, fileExtension, carName, carPrice, carDescription, carYear, carMileage, carTransmission, carFuel, carColor, carCity, carCondition, originalImageFileName) {
+    function constructFinalMetadata(formattedBase64, mimeType, fileExtension, details, originalImageFileName) {
         const tokenId = `token_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-        const listingName = `${carName || 'خودروی نامشخص'} - لیست شده`;
+        const listingName = `${details.make} ${details.model} ${details.trim} - لیست شده`;
         const imageUrl = `data:${mimeType};base64,${formattedBase64}`;
 
         return {
             tokenId,
             name: listingName,
-            description: carDescription || 'خودرویی برای فروش لیست شده است.',
+            description: details.description,
             image: imageUrl,
-            price: parseFloat(carPrice) || 0,
-            vehicleDetails: {
-                model: carName || 'ناشناخته',
-                year: carYear || 'نامشخص',
-                mileage: carMileage || 'نامشخص',
-                transmission: carTransmission || 'نامشخص',
-                fuel: carFuel || 'نامشخص',
-                color: carColor || 'نامشخص',
-                city: carCity || 'نامشخص',
-                condition: carCondition || 'نامشخص',
-                imageFormat: fileExtension || 'نامشخص'
-            },
+            additionalImages: details.additionalImages,
+            price: parseFloat(details.price),
+            vehicleDetails: { ...details, imageFormat: fileExtension },
             attributes: [
-                { trait_type: 'مدل خودرو', value: carName || 'ناشناخته' },
-                { trait_type: 'سال ساخت', value: carYear || 'نامشخص' },
-                { trait_type: 'کارکرد', value: carMileage ? `${Number(carMileage).toLocaleString('fa-IR')} کیلومتر` : 'نامشخص' },
-                { trait_type: 'گیربکس', value: carTransmission || 'نامشخص' },
-                { trait_type: 'نوع سوخت', value: carFuel || 'نامشخص' },
-                { trait_type: 'رنگ', value: carColor || 'نامشخص' },
-                { trait_type: 'شهر', value: carCity || 'نامشخص' },
-                { trait_type: 'وضعیت', value: carCondition || 'نامشخص' },
-                { trait_type: 'قیمت لیست شده', value: `${parseInt(carPrice || 0).toLocaleString('fa-IR')} تومان` },
+                { trait_type: 'سازنده', value: details.make },
+                { trait_type: 'مدل خودرو', value: details.model },
+                { trait_type: 'تیپ', value: details.trim },
+                { trait_type: 'سال ساخت', value: details.year },
+                { trait_type: 'کارکرد', value: `${Number(details.mileage).toLocaleString('fa-IR')} کیلومتر` },
+                { trait_type: 'گیربکس', value: details.transmission },
+                { trait_type: 'نوع سوخت', value: details.fuel },
+                { trait_type: 'رنگ', value: details.color },
+                { trait_type: 'شهر', value: details.city },
+                { trait_type: 'وضعیت', value: details.condition },
+                { trait_type: 'قیمت لیست شده', value: `${parseInt(details.price).toLocaleString('fa-IR')} تومان` },
+                { trait_type: 'قیمت قابل مذاکره', value: details.negotiable },
+                { trait_type: 'شرایط فروش', value: details.saleType },
                 { trait_type: 'تصویر اصلی', value: originalImageFileName },
                 { trait_type: 'نوع فرمت', value: 'Base64 سفارشی + جداکننده‌ها' }
             ]
@@ -135,20 +106,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     processButton.addEventListener('click', async () => {
-        const file = carImageInput.files[0];
-        const carName = carNameInput.value.trim();
-        const carPrice = carPriceInput.value;
-        const carDescription = carDescriptionInput.value.trim();
-        const carYear = carYearInput.value.trim();
-        const carMileage = carMileageInput.value.trim();
-        const carTransmission = carTransmissionInput.value;
-        const carFuel = carFuelInput.value;
-        const carColor = carColorInput.value.trim();
-        const carCity = carCityInput.value.trim();
-        const carCondition = carConditionInput.value;
+        const files = carImageInputs.map(input => input.files[0]);
+        const requiredFields = document.querySelectorAll('.upload-form [required]');
+        const firstMissingField = [...requiredFields].find(field => !field.value.trim());
 
-        if (!file) {
-            base64OutputDiv.innerHTML = '<strong>لطفاً ابتدا تصویر خودرو را انتخاب کنید!</strong>';
+        if (firstMissingField) {
+            firstMissingField.reportValidity();
+            base64OutputDiv.innerHTML = '<strong>لطفاً همه جزئیات الزامی خودرو را تکمیل کنید.</strong>';
+            base64OutputDiv.style.display = 'block';
+            metadataOutputDiv.style.display = 'none';
+            return;
+        }
+
+        const details = {
+            make: carMakeInput.value.trim(),
+            model: carNameInput.value.trim(),
+            trim: carTrimInput.value.trim(),
+            year: carYearInput.value.trim(),
+            mileage: carMileageInput.value.trim(),
+            transmission: carTransmissionInput.value,
+            fuel: carFuelInput.value,
+            color: carColorInput.value.trim(),
+            city: carCityInput.value.trim(),
+            condition: carConditionInput.value,
+            price: carPriceInput.value,
+            documentStatus: documentStatusInput.value,
+            insuranceExpiry: insuranceExpiryInput.value,
+            engineCondition: engineConditionInput.value,
+            gearboxCondition: gearboxConditionInput.value,
+            tiresCondition: tiresConditionInput.value.trim(),
+            accidentHistory: accidentHistoryInput.value,
+            paintedPanels: paintedPanelsInput.value.trim(),
+            features: carFeaturesInput.value.trim(),
+            saleType: saleTypeInput.value,
+            negotiable: negotiableInput.value,
+            description: carDescriptionInput.value.trim()
+        };
+
+        if (files.some(file => !file)) {
+            base64OutputDiv.innerHTML = '<strong>لطفاً هر چهار تصویر خودرو را انتخاب کنید!</strong>';
             base64OutputDiv.style.display = 'block';
             metadataOutputDiv.style.display = 'none';
             return;
@@ -160,12 +156,14 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadMetadataLink.style.display = 'none';
 
         try {
-            const { formatted: formattedBase64, mimeType, fileExtension } = await imageToBase64WithFormatting(file);
+            const images = await Promise.all(files.map(imageToBase64WithFormatting));
+            const [{ formatted: formattedBase64, mimeType, fileExtension }] = images;
+            details.additionalImages = images.map(image => `data:${image.mimeType};base64,${image.formatted}`);
             const snippet = formattedBase64.substring(0, 200) + (formattedBase64.length > 200 ? '...' : '');
-            base64OutputDiv.innerHTML = `<strong>Base64 فرمت شده (قطعه):</strong><br>${snippet}<br><small>فایل اصلی: ${file.name}</small><br><small>نوع MIME: ${mimeType}</small>`;
+            base64OutputDiv.innerHTML = `<strong>چهار تصویر آماده شد.</strong><br><small>تصویر اصلی: ${files[0].name}</small><br><small>قطعه Base64: ${snippet}</small><br><small>نوع MIME: ${mimeType}</small>`;
             base64OutputDiv.style.display = 'block';
 
-            const finalMetadata = constructFinalMetadata(formattedBase64, mimeType, fileExtension, carName, carPrice, carDescription, carYear, carMileage, carTransmission, carFuel, carColor, carCity, carCondition, file.name);
+            const finalMetadata = constructFinalMetadata(formattedBase64, mimeType, fileExtension, details, files[0].name);
             const finalMetadataString = JSON.stringify(finalMetadata, null, 2);
 
             finalMetadataOutputDiv.innerHTML = `<pre>${finalMetadataString}</pre>`;
@@ -283,19 +281,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    let animationInterval = setInterval(drawDigitalRain, 30);
-    const contentDiv = document.querySelector('.content');
-    contentDiv.addEventListener('mouseenter', () => {
-        clearInterval(animationInterval);
-        animationInterval = setInterval(drawDigitalRain, 100);
-    });
-    contentDiv.addEventListener('mouseleave', () => {
-        clearInterval(animationInterval);
-        animationInterval = setInterval(drawDigitalRain, 30);
-    });
-
-    setInterval(drawDigitalRain, 30);
 });
