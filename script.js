@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const carImageInputs = [...document.querySelectorAll('.photo-slot input[type="file"]')];
     const carMakeInput = document.getElementById('carMake');
     const carNameInput = document.getElementById('carName');
-    const carTrimInput = document.getElementById('carTrim');
     const carYearInput = document.getElementById('carYear');
     const carMileageInput = document.getElementById('carMileage');
     const carTransmissionInput = document.getElementById('carTransmission');
@@ -11,16 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const carCityInput = document.getElementById('carCity');
     const carConditionInput = document.getElementById('carCondition');
     const carPriceInput = document.getElementById('carPrice');
-    const documentStatusInput = document.getElementById('documentStatus');
-    const insuranceExpiryInput = document.getElementById('insuranceExpiry');
-    const engineConditionInput = document.getElementById('engineCondition');
-    const gearboxConditionInput = document.getElementById('gearboxCondition');
-    const tiresConditionInput = document.getElementById('tiresCondition');
-    const accidentHistoryInput = document.getElementById('accidentHistory');
-    const paintedPanelsInput = document.getElementById('paintedPanels');
-    const carFeaturesInput = document.getElementById('carFeatures');
-    const saleTypeInput = document.getElementById('saleType');
-    const negotiableInput = document.getElementById('negotiable');
     const carDescriptionInput = document.getElementById('carDescription');
     const processButton = document.getElementById('processButton');
     const base64OutputDiv = document.getElementById('base64Output');
@@ -88,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
             attributes: [
                 { trait_type: 'سازنده', value: details.make },
                 { trait_type: 'مدل خودرو', value: details.model },
-                { trait_type: 'تیپ', value: details.trim },
                 { trait_type: 'سال ساخت', value: details.year },
                 { trait_type: 'کارکرد', value: `${Number(details.mileage).toLocaleString('fa-IR')} کیلومتر` },
                 { trait_type: 'گیربکس', value: details.transmission },
@@ -97,8 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 { trait_type: 'شهر', value: details.city },
                 { trait_type: 'وضعیت', value: details.condition },
                 { trait_type: 'قیمت لیست شده', value: `${parseInt(details.price).toLocaleString('fa-IR')} تومان` },
-                { trait_type: 'قیمت قابل مذاکره', value: details.negotiable },
-                { trait_type: 'شرایط فروش', value: details.saleType },
                 { trait_type: 'تصویر اصلی', value: originalImageFileName },
                 { trait_type: 'نوع فرمت', value: 'Base64 سفارشی + جداکننده‌ها' }
             ]
@@ -121,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const details = {
             make: carMakeInput.value.trim(),
             model: carNameInput.value.trim(),
-            trim: carTrimInput.value.trim(),
             year: carYearInput.value.trim(),
             mileage: carMileageInput.value.trim(),
             transmission: carTransmissionInput.value,
@@ -130,16 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
             city: carCityInput.value.trim(),
             condition: carConditionInput.value,
             price: carPriceInput.value,
-            documentStatus: documentStatusInput.value,
-            insuranceExpiry: insuranceExpiryInput.value,
-            engineCondition: engineConditionInput.value,
-            gearboxCondition: gearboxConditionInput.value,
-            tiresCondition: tiresConditionInput.value.trim(),
-            accidentHistory: accidentHistoryInput.value,
-            paintedPanels: paintedPanelsInput.value.trim(),
-            features: carFeaturesInput.value.trim(),
-            saleType: saleTypeInput.value,
-            negotiable: negotiableInput.value,
             description: carDescriptionInput.value.trim()
         };
 
