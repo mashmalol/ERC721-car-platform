@@ -209,15 +209,15 @@
             position: fixed;
             z-index: 20;
             inset: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.82);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: rgba(17, 17, 17, 0.8);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
             justify-content: center;
-            align-items: flex-start;
-            padding: 60px 16px 24px;
+            align-items: stretch;
+            padding: 0;
         }
 
         .modal.active {
@@ -225,121 +225,131 @@
         }
 
         .modal-content {
-            background-color: rgba(0, 0, 0, 0.92);
-            margin: 0 auto;
-            padding: 24px;
-            border: 3px solid #ff00ff;
-            border-radius: 16px;
-            width: min(760px, 100%);
-            box-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+            background: #f4f1ec;
+            margin: 0;
+            padding: 28px 28px 20px;
+            border: none;
+            border-radius: 0;
+            width: 100%;
+            height: 100vh;
+            max-width: none;
+            box-shadow: none;
             position: relative;
-            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
-            color: #00ffff;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #151515;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+            overflow: hidden;
         }
 
         .modal-content h2 {
-            color: #ffff00;
-            margin-bottom: 18px;
-            border-bottom: 2px dashed #ffff00;
-            padding-bottom: 8px;
+            color: #151515;
+            margin: 0 0 18px;
+            border-bottom: 2px solid #151515;
+            padding-bottom: 12px;
             width: 100%;
+            font-size: clamp(1.5rem, 2vw, 2.2rem);
+            font-weight: 700;
+            text-align: right;
         }
 
         .close-button {
-            color: #aaa;
+            color: #151515;
             position: absolute;
-            top: 10px;
-            right: 16px;
-            font-size: 30px;
-            font-weight: bold;
+            top: 16px;
+            left: 18px;
+            font-size: 42px;
+            line-height: 1;
+            font-weight: 300;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: opacity 0.2s ease;
         }
 
         .close-button:hover,
         .close-button:focus {
-            color: red;
+            color: #151515;
+            opacity: 0.7;
             text-decoration: none;
         }
 
         .car-tokens-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
             width: 100%;
-            max-height: 60vh;
+            height: calc(100vh - 120px);
             overflow-y: auto;
-            padding-right: 10px;
+            padding: 4px 4px 12px;
+            align-content: start;
         }
 
         .car-token-card {
-            background-color: rgba(20, 20, 20, 0.8);
-            border: 4px solid;
-            border-image-slice: 1;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+            background: #ffffff;
+            border: 1px solid #d9d5d0;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: right;
+            box-shadow: 0 8px 18px rgba(21, 21, 21, 0.08);
+            font-family: Arial, Helvetica, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 280px;
+            min-height: 340px;
         }
-
-        .hue-border-1 { border-image-source: linear-gradient(to right, cyan, magenta); }
-        .hue-border-2 { border-image-source: linear-gradient(to right, yellow, cyan); }
-        .hue-border-3 { border-image-source: linear-gradient(to right, magenta, yellow); }
-        .hue-border-4 { border-image-source: linear-gradient(to right, lime, blue); }
-        .hue-border-5 { border-image-source: linear-gradient(to right, orange, purple); }
 
         .car-token-card img {
             max-width: 100%;
-            height: 120px;
+            height: 140px;
             object-fit: cover;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            border: 2px solid #fff;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #d9d5d0;
+            background: #f0efe9;
         }
 
         .car-token-card h3 {
-            color: #ffff00;
-            margin-bottom: 8px;
+            color: #151515;
+            margin: 0 0 10px;
             font-size: 1.1em;
+            line-height: 1.5;
+            font-weight: 700;
         }
 
         .car-token-card p {
-            font-size: 0.9em;
-            margin-bottom: 15px;
+            font-size: 0.95em;
+            margin: 0 0 14px;
             flex-grow: 1;
+            color: #2e2e2e;
+            line-height: 1.7;
         }
 
         .car-token-card .price {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #00ffff;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 5px 10px;
-            border-radius: 3px;
+            font-size: 1.05em;
+            font-weight: 700;
+            color: #151515;
+            background: #f3f0eb;
+            border: 1px solid #d9d5d0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-align: center;
         }
 
         .car-token-card .buy-button {
-            background-color: #00ff00;
-            color: #000;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-weight: bold;
+            background: #151515;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
-            font-family: 'Courier New', 'Nimbus Mono PS', monospace;
+            transition: opacity 0.2s ease;
+            margin-top: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+            border: none;
         }
 
         .car-token-card .buy-button:hover {
-            background-color: #00cc00;
+            opacity: 0.88;
         }
 
         .info-button {
@@ -848,36 +858,31 @@
     <div id="infoModal" class="modal">
         <div class="modal-content info-modal-content">
             <span class="close-button">&times;</span>
-            <span class="fab-kicker">Listing protocol / 04</span>
-            <h2>قبل از تولید لیست</h2>
-            <p>این فرم برای تبدیل یک خودرو به یک رکورد قابل بررسی طراحی شده است. اطلاعات را از روی سند، بیمه‌نامه و بازدید فنی وارد کنید؛ حدس‌زدن، کیفیت آگهی را پایین می‌آورد.</p>
-            <h3>کنترل‌های ضروری</h3>
+            <h2>Token Generator</h2>
+            <p>این ابزار برای تولید توکن خودرو و متادیتای آن طراحی شده است. پس از وارد کردن مشخصات، تصویر و شرایط فنی، یک فایل JSON آماده دانلود می‌شود.</p>
+            <h3>چه چیزی تولید می‌شود؟</h3>
             <ul>
-                <li>هویت: سازنده، مدل، تیپ، سال، شهر و رنگ</li>
-                <li>وضعیت: موتور، گیربکس، لاستیک، تصادف و قطعات رنگ‌شده</li>
-                <li>معامله: قیمت، نوع فروش و امکان مذاکره</li>
-                <li>خروجی: تصویر، توضیحات و متادیتای JSON قابل دانلود</li>
+                <li>شناسه یکتا برای هر توکن خودرو</li>
+                <li>نام، توضیحات و ویژگی‌های قابل فیلتر</li>
+                <li>تصویر اصلی و داده‌های تصویری آماده برای متادیتا</li>
+                <li>فایل JSON قابل دانلود برای استفاده در بازارهای دیجیتال</li>
             </ul>
-            <h3>برای اطلاعات دقیق‌تر</h3>
+            <h3>مهم‌ترین فیلدها</h3>
             <ul>
-                <li>تصویر: عکس روشن و واقعی از جلو، عقب، کابین و بخش‌های آسیب‌دیده اضافه کنید.</li>
-                <li>فنی: وضعیت موتور، گیربکس و لاستیک را بر اساس بازدید یا گزارش کارشناسی وارد کنید.</li>
-                <li>بدنه: قطعات رنگ‌شده و تصادف را دقیق بنویسید؛ «بدون رنگ» را فقط در صورت اطمینان انتخاب کنید.</li>
-                <li>امکانات: آپشن‌ها را با جداکننده بنویسید، مثل «سانروف، دوربین، سنسور پارک».</li>
-                <li>توضیحات: ایرادهای موجود، زمان آخرین سرویس و هر نکته‌ای که خریدار باید بداند را اضافه کنید.</li>
+                <li>سازنده، مدل، تیپ و سال ساخت</li>
+                <li>کارکرد، رنگ، شهر و وضعیت کلی خودرو</li>
+                <li>وضعیت موتور، گیربکس، لاستیک و تصادف</li>
+                <li>قیمت، نوع فروش و قابلیت مذاکره</li>
             </ul>
-            <h3>خروجی چه دارد؟</h3>
-            <p>فایل JSON شامل شناسه لیست، قیمت، تصویر، مشخصات خودرو، وضعیت فنی و شرایط معامله است. این فایل برای آرشیو، بررسی یا اتصال به سیستم‌های بعدی آماده می‌شود.</p>
-            <h3>ERC-721 و متادیتای JSON</h3>
-            <p>در استاندارد ERC-721، هر توکن می‌تواند به یک فایل متادیتا اشاره کند. این فایل معمولاً شامل چهار بخش اصلی است:</p>
+            <h3>ERC-721</h3>
+            <p>در استاندارد ERC-721، هر توکن می‌تواند به یک فایل متادیتا اشاره کند. این فایل معمولاً شامل این بخش‌هاست:</p>
             <ul>
-                <li><strong>name:</strong> نام قابل نمایش توکن، مانند سازنده، مدل و تیپ خودرو</li>
-                <li><strong>description:</strong> توضیحات کامل درباره وضعیت و شرایط خودرو</li>
-                <li><strong>image:</strong> تصویر خودرو با آدرس یا داده تصویری قابل خواندن توسط کیف‌پول و مارکت</li>
-                <li><strong>attributes:</strong> ویژگی‌های قابل فیلتر مانند سال، کارکرد، رنگ، سوخت و قیمت</li>
+                <li><strong>name:</strong> نام توکن، مانند برند، مدل و نسخه خودرو</li>
+                <li><strong>description:</strong> توضیح کامل درباره خودرو و شرایط فروش</li>
+                <li><strong>image:</strong> تصویر خودرو به‌صورت داده یا آدرس قابل‌استفاده</li>
+                <li><strong>attributes:</strong> اطلاعات قابل‌فیلتر مانند رنگ، سال، کارکرد و قیمت</li>
             </ul>
-            <p>شناسه توکن باید یکتا باشد و آدرس متادیتا باید تا حد ممکن پایدار بماند. این پروژه فایل JSON را آماده و قابل دانلود می‌کند؛ اتصال کیف‌پول، ذخیره‌سازی دائمی و مینت واقعی روی شبکه هنوز جداگانه باید اضافه شود.</p>
-            <p class="small-note">اطلاعات تماس در متادیتای عمومی ذخیره نمی‌شود؛ آن را فقط در کانال امن معامله نگه دارید.</p>
+            <p>این پروژه فقط فایل متادیتا را آماده می‌کند؛ اتصال کیف‌پول، ذخیره‌سازی دائمی و مینت واقعی روی شبکه باید به‌صورت جداگانه انجام شود.</p>
         </div>
     </div>
 

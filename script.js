@@ -234,32 +234,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'پژو پارس مدل ۱۴۰۱',
                 description: 'خودروی کلاسیک، کاملا بازسازی شده. یک اثر واقعی!',
                 image: 'https://via.placeholder.com/250x120/00ffff/000000?text=Pars',
-                price: 1200000000,
-                borderClass: 'hue-border-1'
+                price: 1200000000
             },
             {
                 tokenId: 'token_1678886500_fghij',
                 name: 'تیبا ۲ مدل ۱۳۹۹',
                 description: 'مدل جدید، قابلیت رانندگی خودکار کامل، برد بلند.',
                 image: 'https://via.placeholder.com/250x120/ff00ff/ffffff?text=Tiba2',
-                price: 850000000,
-                borderClass: 'hue-border-2'
+                price: 850000000
             },
             {
                 tokenId: 'token_1678886600_klmno',
                 name: 'سمند LX مدل ۱۴۰۰',
                 description: 'افسانه JDM، آماده برای تیونینگ. کارکرد کم.',
                 image: 'https://via.placeholder.com/250x120/ffff00/000000?text=Samand',
-                price: 950000000,
-                borderClass: 'hue-border-3'
+                price: 950000000
             },
             {
                 tokenId: 'token_1678886700_pqrst',
                 name: 'پژو ۲۰۷i مدل ۱۴۰۲',
                 description: 'عملکرد متمرکز بر پیست، تجربه رانندگی هیجان‌انگیز.',
                 image: 'https://via.placeholder.com/250x120/00ffff/ffffff?text=Peugeot+207',
-                price: 1100000000,
-                borderClass: 'hue-border-4'
+                price: 1100000000
             }
         ];
 
@@ -267,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         sampleTokens.forEach(token => {
             const card = document.createElement('div');
-            card.classList.add('car-token-card', token.borderClass);
+            card.classList.add('car-token-card');
             const formattedPrice = token.price.toLocaleString('fa-IR', { style: 'currency', currency: 'IRR', maximumFractionDigits: 0 });
 
             card.innerHTML = `
