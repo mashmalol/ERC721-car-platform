@@ -316,6 +316,55 @@
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
         }
 
+        .info-modal-content {
+            direction: rtl;
+            text-align: right;
+            font-family: Tahoma, Arial, sans-serif;
+        }
+
+        .info-modal-content h2,
+        .info-modal-content h3,
+        .info-modal-content p,
+        .info-modal-content li {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .info-modal-content pre {
+            direction: ltr;
+            text-align: left;
+            background: #f7f7f7;
+            border: 1px solid #e7e1db;
+            border-radius: 12px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.78rem;
+            line-height: 1.7;
+            margin: 10px 0 18px;
+        }
+
+        .info-modal-content ol {
+            margin: 8px 0 18px;
+            padding-right: 1.3rem;
+            line-height: 1.9;
+        }
+
+        .info-modal-content #copyContractButton {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            border: 1px solid #d9d4cd;
+            background: #fff;
+            color: var(--ink);
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
         @media (max-width: 720px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -457,31 +506,28 @@
     <div id="infoModal" class="modal">
         <div class="modal-content info-modal-content">
             <span class="close-button">&times;</span>
-            <h2>Token Generator</h2>
-            <p>این ابزار برای تولید توکن خودرو و متادیتای آن طراحی شده است. پس از وارد کردن مشخصات، تصویر و شرایط فنی، یک فایل JSON آماده دانلود می‌شود.</p>
-            <h3>چه چیزی تولید می‌شود؟</h3>
-            <ul>
-                <li>شناسه یکتا برای هر توکن خودرو</li>
-                <li>نام، توضیحات و ویژگی‌های قابل فیلتر</li>
-                <li>تصویر اصلی و داده‌های تصویری آماده برای متادیتا</li>
-                <li>فایل JSON قابل دانلود برای استفاده در بازارهای دیجیتال</li>
-            </ul>
-            <h3>مهم‌ترین فیلدها</h3>
-            <ul>
-                <li>سازنده، مدل، تیپ و سال ساخت</li>
-                <li>کارکرد، رنگ، شهر و وضعیت کلی خودرو</li>
-                <li>وضعیت موتور، گیربکس، لاستیک و تصادف</li>
-                <li>قیمت، نوع فروش و قابلیت مذاکره</li>
-            </ul>
-            <h3>ERC-721</h3>
-            <p>در استاندارد ERC-721، هر توکن می‌تواند به یک فایل متادیتا اشاره کند. این فایل معمولاً شامل این بخش‌هاست:</p>
-            <ul>
-                <li><strong>name:</strong> نام توکن، مانند برند، مدل و نسخه خودرو</li>
-                <li><strong>description:</strong> توضیح کامل درباره خودرو و شرایط فروش</li>
-                <li><strong>image:</strong> تصویر خودرو به‌صورت داده یا آدرس قابل‌استفاده</li>
-                <li><strong>attributes:</strong> اطلاعات قابل‌فیلتر مانند رنگ، سال، کارکرد و قیمت</li>
-            </ul>
-            <p>این پروژه فقط فایل متادیتا را آماده می‌کند؛ اتصال کیف‌پول، ذخیره‌سازی دائمی و مینت واقعی روی شبکه باید به‌صورت جداگانه انجام شود.</p>
+            <h2>راهنمای Mint Portal</h2>
+            <p>این ابزار به شما کمک می‌کند خودرو را با جزئیات کامل ثبت کنید و فایل متادیتا برای NFT آن را آماده کنید.</p>
+
+            <h3>ERC-721 چیست؟</h3>
+            <p>ERC-721 استانداردی برای NFTهاست. به زبان ساده، هر خودرو می‌تواند یک توکن یکتا باشد؛ یعنی یک NFT مخصوص خودش داشته باشد که نام، توضیحات، تصویر و ویژگی‌های خاص را در خود نگه می‌دارد.</p>
+
+            <h3>یک قرارداد ساده ERC-721</h3>
+            <pre id="erc721ContractCode"></pre>
+            <button id="copyContractButton" type="button">کپی قرارداد</button>
+
+            <h3>چطور خودرو را mint کنیم؟</h3>
+            <ol>
+                <li>در فرم اصلی، مشخصات خودرو را وارد کنید.</li>
+                <li>چهار عکس از خودرو را آپلود کنید.</li>
+                <li>روی دکمه «تولید لیست و متادیتا» کلیک کنید.</li>
+                <li>فایل JSON تولید شده را دانلود کنید.</li>
+                <li>یک قرارداد ERC-721 روی شبکه موردنظر خود deploy کنید.</li>
+                <li>در Mint Portal یا کیف پول خود، تابع mint را اجرا کنید تا NFT خودرو ساخته شود.</li>
+            </ol>
+
+            <h3>نکته مهم</h3>
+            <p>این پروژه فقط داده‌ها و فرمت آماده‌سازی NFT را برای شما ساده می‌کند. deploy واقعی قرارداد و mint نهایی باید روی شبکه‌ای که انتخاب می‌کنید انجام شود.</p>
         </div>
     </div>
 

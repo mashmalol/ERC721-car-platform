@@ -23,6 +23,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const infoButton = document.getElementById('infoButton');
     const infoModal = document.getElementById('infoModal');
+    const copyContractButton = document.getElementById('copyContractButton');
+    const erc721ContractCode = document.getElementById('erc721ContractCode');
+
+    const simpleErc721Contract = `// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract CarNFT is ERC721, Ownable {
+    uint256 public nextTokenId;
+
+    constructor() ERC721("CarNFT", "CARNFT") Ownable(msg.sender) {}
+
+    function mint(address to) external onlyOwner {
+        _safeMint(to, nextTokenId);
+        nextTokenId++;
+    }
+}`;
+
+    if (erc721ContractCode) {
+        erc721ContractCode.textContent = simpleErc721Contract;
+    }
 
     function openModal(modal) {
         modal.classList.add('active');
@@ -184,6 +207,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     infoButton.addEventListener('click', () => {
         openModal(infoModal);
+    });
+
+    copyContractButton.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(simpleErc721Contract);
+            copyContractButton.textContent = 'کپی شد';
+            setTimeout(() => {
+                copyContractButton.textContent = 'کپی قرارداد';
+            }, 1500);
+        } catch (error) {
+            console.error('Clipboard copy failed:', error);
+            copyContractButton.textContent = 'کپی ناموفق';
+            setTimeout(() => {
+                copyContractButton.textContent = 'کپی قرارداد';
+            }, 1500);
+        }
     });
 
     window.addEventListener('click', (event) => {
